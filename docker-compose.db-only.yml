@@ -1,0 +1,15 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:12.2
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: spoon-and-fork
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: spoon-and-fork
+volumes:
+  db:

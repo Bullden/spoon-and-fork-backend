@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:12.2
+    networks:
+      backend:
+        aliases:
+          - db-testing
+    ports:
+      - 5432:5432
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: Spoon
+  backend:
+    image: spoon-and-fork-backend
+    build: .
+    networks:
+      - backend
+    depends_on:
+      - db
+    ports:
+      - 80:80
+    environment:
+      NODE_ENV: testing
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USERNAME: spoon
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: spoon
+      FILE_STORAGE_ROOT_DIRECTORY: files
+volumes:
+  db:
+networks:
+  backend:

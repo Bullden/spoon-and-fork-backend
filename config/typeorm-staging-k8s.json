@@ -1,0 +1,11 @@
+{
+  "type": "postgres",
+  "host": "spoonandfork-staging-database",
+  "port": 5432,
+  "username": "spoon",
+  "password": "admin",
+  "database": "spoon",
+  "entities": ["dist/database/entities/*.js"],
+  "migrationsTableName": "migrations",
+  "migrations": ["migrations/*.ts"]
+}

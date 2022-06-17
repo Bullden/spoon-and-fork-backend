@@ -1,0 +1,359 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type AdditionalUserInfo {
+  phoneNumber: String!
+  email: String!
+}
+
+type User {
+  id: ID!
+  image: String
+  name: String!
+  preferencesId: String!
+  lat: Float!
+  lng: Float!
+  additionalUserInfo: AdditionalUserInfo
+}
+
+type Preferences {
+  id: ID!
+  allowPushNotifications: Boolean!
+  allowEmailNotifications: Boolean!
+  allowSmsNotifications: Boolean!
+}
+
+type Account {
+  user: User!
+  info: AdditionalUserInfo!
+  preferences: Preferences!
+}
+
+type Client {
+  id: String!
+  user: User!
+}
+
+type DocumentsRevision {
+  id: String!
+  comment: String!
+  status: DocumentsRevisionStatus!
+}
+
+enum DocumentsRevisionStatus {
+  New
+  VerificationRequested
+  ChangesRequested
+  Approved
+  Rejected
+}
+
+type Courier {
+  id: String!
+  user: User!
+  revision: DocumentsRevision
+}
+
+type Address {
+  id: ID!
+  placeId: String
+  lat: Float!
+  lng: Float!
+  description: String!
+  entrance: String
+  floor: String
+  apartment: String
+  date: DateTime
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Ingredient {
+  id: ID!
+  name: String!
+}
+
+type Status {
+  id: ID!
+  name: String!
+  imageId: String!
+}
+
+type Dish {
+  id: ID!
+  name: String!
+  description: String!
+  imageId: String!
+  weight: String!
+  kal: String!
+  ingredients: [Ingredient!]!
+}
+
+type Set {
+  id: ID!
+  name: String!
+  imageId: String!
+  cuisineId: String!
+  priceCents: Int!
+  dishes: [Dish!]!
+  statuses: [Status!]!
+  day: String
+  isFavorite: Boolean
+}
+
+type Cuisine {
+  id: ID!
+  imageId: String!
+  nationality: String!
+  rating: String
+}
+
+type Restaurant {
+  id: ID!
+  user: User!
+  imageId: String!
+  address: Address!
+  title: String!
+  description: String!
+  cuisines: [Cuisine!]!
+}
+
+type Document {
+  id: ID!
+  group: DocumentGroup!
+  fileId: String!
+}
+
+enum DocumentGroup {
+  EmploymentAgreement
+  DriversLicense
+}
+
+type EmailForSpam {
+  id: ID!
+  email: String!
+  isDiscount: Boolean!
+}
+
+type Bag {
+  id: ID!
+  code: String!
+}
+
+type OrderInfo {
+  id: String!
+  clientAddress: Address!
+  distanceMiles: Float
+  priceCents: Int!
+}
+
+type Cart {
+  id: ID!
+  userId: String!
+  status: CartState!
+}
+
+enum CartState {
+  Active
+  Delivered
+}
+
+type Order {
+  id: String!
+  client: User!
+  restaurant: Restaurant
+  cart: Cart!
+  bag: Bag
+  set: Set!
+  number: Float!
+  orderInfo: OrderInfo!
+  created: DateTime!
+  placement: OrderPlacement!
+  state: OrderState!
+  courierId: String
+  courier: Courier
+  rating: String
+  date: DateTime!
+}
+
+enum OrderPlacement {
+  Client
+  Restaurant
+}
+
+enum OrderState {
+  WaitingForPayment
+  ReadyForDelivery
+  AcceptedByCourier
+  AcceptedByRestaurant
+  Delivering
+  Delivered
+  Completed
+}
+
+type LatLng {
+  lat: Float!
+  lng: Float!
+}
+
+input IngredientInput {
+  id: ID!
+  name: String!
+}
+
+input StatusInput {
+  id: ID!
+  name: String!
+  imageId: String!
+}
+
+input DishInput {
+  id: ID!
+  name: String!
+  description: String!
+  imageId: String!
+  weight: String!
+  kal: String!
+  ingredients: [IngredientInput!]!
+}
+
+input SetInput {
+  id: ID!
+  name: String!
+  imageId: String!
+  cuisineId: String!
+  priceCents: Int!
+  dishes: [DishInput!]!
+  statuses: [StatusInput!]!
+  day: String
+  isFavorite: Boolean
+}
+
+type Query {
+  myAccount: Account!
+  restaurants: [Restaurant!]!
+  restaurantById(restaurantId: ID!): Restaurant!
+  currentRestaurant: Restaurant
+  cuisineById(id: String!): Cuisine!
+  cuisines: [Cuisine!]!
+  cuisinesByRestaurantId(id: String!): [Cuisine!]!
+  setById(id: String!): Set!
+  setsByCuisineId(id: String!): [Set!]!
+  sets: [Set!]!
+  setsByDishId(id: String!): [Set!]!
+  dishById(id: String!): Dish!
+  dishes: [Dish!]!
+  dishesBySetId(id: String!): [Dish!]!
+  bagByCode(code: String!): Bag!
+  bagByOrderId(id: String!): Bag!
+  orders: [Order!]!
+  orderById(id: ID!): Order!
+  orderState(id: ID!): OrderState!
+  ordersForDelivery: [Order!]!
+  orderHistory: [Order!]!
+  currentOrder: Order
+  ordersByUserId: [Order!]!
+  ordersByCartId(id: String!): [Order!]!
+  ordersByCourierId: [Order!]!
+  ordersByRestaurantId: [Order!]!
+  preferences: Preferences!
+  couriers: [Courier!]!
+  courierById(courierId: ID!): Courier!
+  clients: [Client!]!
+  clientById(clientId: ID!): Client!
+  cartsByUserId: [Cart!]!
+  clientOrdersAddresses: [Address!]!
+  userLocation(id: String!): LatLng
+  statusById(id: String!): Status!
+  statuses: [Status!]!
+  ingredientById(id: String!): Status!
+  ingredientsByDishId(id: String!): [Status!]!
+  currentRevision: DocumentsRevision
+  documents(revisionId: ID!): [Document!]!
+  getEmailsForSpam: [EmailForSpam!]!
+}
+
+type Mutation {
+  updateMyAccount(user: UserUpdateRequest!): Account!
+  updateMyAccountImage(image: String!): Boolean!
+  createRestaurant(placeId: String, cuisines: [String!]!, restaurantDescription: String!, title: String!, imageId: String!, addressDescription: String!, lng: Float!, lat: Float!, password: String!, phoneNumber: String!, email: String!, name: String!): Boolean!
+  updateRestaurant(placeId: String, cuisines: [String!]!, restaurantDescription: String!, title: String!, imageId: String!, addressDescription: String!, lng: Float!, lat: Float!, phoneNumber: String!, email: String!, name: String!, id: String!): Restaurant!
+  deleteRestaurant(restaurantId: ID!): Boolean!
+  updateCuisine(nationality: String!, imageId: String!, id: String!): Cuisine!
+  createCuisine(nationality: String!, imageId: String!): Boolean!
+  deleteCuisine(cuisineId: ID!): Boolean!
+  updateSet(statuses: [String!]!, dishes: [String!]!, cuisineId: String!, priceCents: String!, imageId: String!, name: String!, id: String!): Set!
+  createSet(statuses: [String!]!, dishes: [String!]!, cuisineId: String!, priceCents: String!, imageId: String!, name: String!): Boolean!
+  distributeSetsOfWeek(setIdsAndDays: [SetIdAndDay!]!): Boolean!
+  deleteSet(setId: ID!): Boolean!
+  updateDish(imageId: String!, sets: [String!]!, ingredients: [String!]!, kal: String!, weight: String!, description: String!, name: String!, id: String!): Dish!
+  createDish(sets: [String!]!, ingredients: [String!]!, kal: String!, weight: String!, description: String!, name: String!, imageId: String!): Boolean!
+  deleteDish(dishId: ID!): Boolean!
+  createOrder(numberOfDays: Float!, restaurantId: String!, cartId: String!, setId: String!, clientAddress: CreateAddressRequest!): Order!
+  evaluateOrder(rating: Float!, id: String!): Boolean!
+  acceptOrder(id: String!): Boolean!
+  markOrder(bagId: String!, orderId: String!): Boolean!
+  deleteOrder(orderId: ID!): Boolean!
+  removeTheCurrentCourier(orderId: ID!): Boolean!
+  updatePreferences(allowSmsNotifications: Boolean, allowEmailNotifications: Boolean, allowPushNotifications: Boolean): Preferences!
+  updateClientInformation(phoneNumber: String!, email: String!, name: String!, id: ID!): Boolean!
+  updateCourierInformation(phoneNumber: String!, email: String!, name: String!, id: ID!): Boolean!
+  createCartAndDistributeOrders(selectedSetsInfo: [SelectedSetInfo!]!, clientAddress: CreateAddressRequest!): Cart!
+  createAddress(location: CreateAddressRequest!): Boolean!
+  updateLocation(latLng: LatLngInput!): Boolean!
+  updateStatus(name: String!, imageId: String!, id: String!): Status!
+  createStatus(name: String!, imageId: String!): Boolean!
+  deleteStatus(statusId: ID!): Boolean!
+  addDocument(group: DocumentGroup!, fileId: ID!): Document!
+  deleteDocument(documentId: ID!): Boolean!
+  requestDocumentsRevisionVerification(revisionId: ID!): Boolean!
+  evaluateDocumentsRevision(comment: String!, type: EvaluateDocumentsRevisionType!, courierId: ID!): Boolean!
+  createEmailForSpam(email: CreateEmailForSpamRequest!): Boolean!
+}
+
+input UserUpdateRequest {
+  name: String!
+  email: String!
+  phoneNumber: String!
+}
+
+input SetIdAndDay {
+  setId: String!
+  day: String
+}
+
+input CreateAddressRequest {
+  placeId: String
+  lat: Float!
+  lng: Float!
+  description: String!
+  entrance: String
+  floor: String
+  apartment: String
+}
+
+input SelectedSetInfo {
+  set: SetInput!
+  quantity: Float!
+  numberOfDays: Float!
+}
+
+input LatLngInput {
+  lat: Float!
+  lng: Float!
+}
+
+enum EvaluateDocumentsRevisionType {
+  Approve
+  RequestChanges
+  Reject
+}
+
+input CreateEmailForSpamRequest {
+  email: String!
+  isDiscount: Boolean!
+}

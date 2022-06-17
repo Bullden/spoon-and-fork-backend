@@ -1,0 +1,14 @@
+{
+  "type": "postgres",
+  "host": "localhost",
+  "port": 5432,
+  "username": "spoon",
+  "password": "admin",
+  "database": "spoon",
+  "entities": ["dist/src/database/entities/*.js"],
+  "migrationsTableName": "migrations",
+  "migrations": ["migrations/*.ts"],
+  "cli": {
+    "migrationsDir": "migrations"
+  }
+}
